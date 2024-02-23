@@ -1,6 +1,7 @@
 const express = require('express');
 const docsRoute = require('./swagger');
 const envConfig = require('../config/env');
+const authRoutes = require('./auth');
 
 const router = express.Router();
 
@@ -19,7 +20,12 @@ router.get('/health', (_, res) => {
   res.json({ message: 'Hello from server!' });
 });
 
-const defaultRoutes = [];
+const defaultRoutes = [
+  {
+    path: '/auth',
+    route: authRoutes,
+  },
+];
 
 const devRoutes = [
   {
