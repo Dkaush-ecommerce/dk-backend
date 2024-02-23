@@ -5,19 +5,18 @@ components:
       properties:
         id:
           type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
         email:
           type: string
           format: email
-        name:
-          type: string
-        role:
-          type: string
-          enum: [user, admin]
       example:
         id: 5ebac534954b54139806c112
+        firstName: fake first name
+        lastName: fake last name
         email: fake@example.com
-        name: fake name
-        role: user
 
     Token:
       type: object

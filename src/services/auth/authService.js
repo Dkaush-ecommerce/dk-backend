@@ -25,7 +25,7 @@ const signup = async (userObj) => {
       tokens,
     };
     result = {
-      status: StatusCodes.OK,
+      status: StatusCodes.CREATED,
       message: 'successful',
       data: responseObj,
     };
