@@ -37,7 +37,6 @@ const generateAuthTokens = async (user) => {
     refreshTokenExpires,
     tokenTypes.REFRESH
   );
-
   return {
     access: {
       token: accessToken,

@@ -1,23 +1,23 @@
 const { StatusCodes } = require('http-status-codes');
 const authService = require('../services/auth/authService');
+const tokenService = require('../services/token/tokenService');
+const catchAsync = require('../utils/catchAsync');
 
-const signup = async (req, res) => {
-  try {
-    const response = await authService.signup(req.body);
-    return res.status(response.status).send(response);
-  } catch (err) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
-      status: StatusCodes.INTERNAL_SERVER_ERROR,
-      message: 'failed',
-      error: err,
-    });
-  }
-};
+const signup = catchAsync(async (req, res) => {
+  const user = await authService.signup(req.body);
+  const tokens = await tokenService.generateAuthTokens(user);
+  return res.status(StatusCodes.CREATED).send({ user, tokens });
+});
 
-const login = async (req, res) => {};
+const login = catchAsync(async (req, res) => {
+  const { email, password } = req.body;
+  const user = await authService.loginWithEmailAndPassword(email, password);
+  const tokens = await tokenService.generateAuthTokens(user);
+  return res.status(StatusCodes.OK).send({ user, tokens });
+});
 
-const logout = async (req, res) => {};
+const logout = catchAsync(async (req, res) => {});
 
-const refresh = async (req, res) => {};
+const refresh = catchAsync(async (req, res) => {});
 
 module.exports = { signup, login, logout, refresh };
