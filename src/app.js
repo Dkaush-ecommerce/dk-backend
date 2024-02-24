@@ -4,6 +4,8 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const envConfig = require('./config/env');
 const routes = require('./routes');
+const connectDB = require('./db/connectDb');
+const errorHandler = require('./errors/error');
 
 const app = express();
 app.use(cors());
@@ -13,6 +15,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api', routes);
 
-app.listen(envConfig.port, () => {
+app.use(errorHandler);
+
+app.listen(envConfig.port, async () => {
   console.log(`Server is running on port ${envConfig.port}`);
+  await connectDB(envConfig.mongoUri);
 });
