@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const envConfig = require('./config/env');
@@ -9,6 +10,7 @@ const errorHandler = require('./errors/error');
 
 const app = express();
 app.use(cors());
+app.use(cookieParser());
 app.use(morgan('combined'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

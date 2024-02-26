@@ -20,9 +20,18 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    refreshToken: {
+      type: String,
+      default: '',
+    },
   },
   { timestamps: true }
 );
+
+userSchema.statics.isEmailTaken = async function (email, excludeUserId) {
+  const user = await this.findOne({ email, _id: { $ne: excludeUserId } });
+  return !!user;
+};
 
 userSchema.methods.isPasswordMatch = async function (password) {
   const user = this;
