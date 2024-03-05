@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const reviewSchema = require('../schemas/Review');
 
 const productSchema = mongoose.Schema(
   {
@@ -31,6 +32,7 @@ const productSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
+    reviews: [reviewSchema],
   },
   { timestamps: true }
 );

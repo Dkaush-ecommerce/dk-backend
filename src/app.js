@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
+const moment = require('moment');
 const bodyParser = require('body-parser');
 const envConfig = require('./config/env');
 const routes = require('./routes');
