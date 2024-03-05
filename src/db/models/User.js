@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const cartSchema = require('../schemas/Cart');
 
 const userSchema = mongoose.Schema(
   {
@@ -26,6 +27,13 @@ const userSchema = mongoose.Schema(
     refreshToken: {
       type: String,
       default: '',
+    },
+    cart: cartSchema,
+    wishlist: {
+      type: Array,
+      of: mongoose.Schema.Types.ObjectId,
+      ref: 'Product',
+      default: [],
     },
   },
   { timestamps: true }
