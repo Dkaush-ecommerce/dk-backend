@@ -3,12 +3,7 @@ const jwt = require('jsonwebtoken');
 const envConfig = require('../../config/env');
 const tokenTypes = require('./token.types');
 
-const generateToken = (
-  user,
-  expires,
-  type,
-  secret = envConfig.jwt.secret
-) => {
+const generateToken = (user, expires, type, secret = envConfig.jwt.secret) => {
   const payload = {
     sub: user,
     iat: moment().unix(),
@@ -37,16 +32,7 @@ const generateAuthTokens = async (user) => {
     refreshTokenExpires,
     tokenTypes.REFRESH
   );
-  return {
-    access: {
-      token: accessToken,
-      expires: accessTokenExpires.toDate(),
-    },
-    refresh: {
-      token: refreshToken,
-      expires: refreshTokenExpires.toDate(),
-    },
-  };
+  return { accessToken, refreshToken };
 };
 
 module.exports = { generateToken, generateAuthTokens };

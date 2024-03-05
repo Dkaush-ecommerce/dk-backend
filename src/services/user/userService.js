@@ -4,4 +4,7 @@ const getUserById = async (id) => User.findById(id);
 
 const getUserByEmail = async (email) => User.findOne({ email });
 
-module.exports = { getUserById, getUserByEmail };
+const getUserByRefreshToken = async (refreshToken) =>
+  User.findOne({ refreshToken });
+
+module.exports = { getUserById, getUserByEmail, getUserByRefreshToken };
