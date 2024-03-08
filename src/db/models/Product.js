@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const reviewSchema = require('../schemas/Review');
 
 const productSchema = mongoose.Schema(
   {
@@ -12,16 +13,12 @@ const productSchema = mongoose.Schema(
       required: true,
     },
     inStock: {
-      type: Boolean,
+      type: Number,
       required: true,
     },
     description: {
       type: String,
       required: true,
-    },
-    refreshToken: {
-      type: String,
-      default: '',
     },
     marked_price: {
       type: Number,
@@ -30,6 +27,10 @@ const productSchema = mongoose.Schema(
     price: {
       type: Number,
       required: true,
+    },
+    reviews: {
+      type: [reviewSchema],
+      default: [],
     },
   },
   { timestamps: true }
