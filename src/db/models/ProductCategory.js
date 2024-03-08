@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const userSchema = mongoose.Schema(
+const productCategorySchema = mongoose.Schema(
   {
     name: {
       type: String,
@@ -11,6 +11,16 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    parentCategory: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'ProductCategory',
+      default: null,
+    },
+    description: {
+      type: String,
+      trim: true,
+      default: '',
+    },
     products: {
       type: Array,
       of: mongoose.Schema.Types.ObjectId,
@@ -20,4 +30,4 @@ const userSchema = mongoose.Schema(
   { timestamps: { createdAt: true } }
 );
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('ProductCategory', productCategorySchema);
