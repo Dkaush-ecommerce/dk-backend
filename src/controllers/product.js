@@ -36,7 +36,7 @@ const getProductsByCategory = catchAsync(async (req, res) => {
 });
 
 const getProductBySku = catchAsync(async (req, res) => {
-  const product = await productService.getProductBySku(req.body.sku);
+  const product = await productService.getProductBySku(req.params.sku);
   res.status(StatusCodes.OK).json({ product });
 });
 
