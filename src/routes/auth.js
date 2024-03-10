@@ -70,14 +70,10 @@ module.exports = router;
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Email already taken!
- *                 code:
- *                    type: integer
- *                    example: 400
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               message: Email already taken!
+ *               code: 400
  */
 
 /**
@@ -120,14 +116,10 @@ module.exports = router;
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Incorrect email or password
- *                 code:
- *                    type: integer
- *                    example: 401
+ *               $ref: '#/components/schemas/Error'
+ *            example:
+ *             message: Incorrect email or password
+ *             code: 401
  */
 
 /**
@@ -144,14 +136,10 @@ module.exports = router;
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: User not found
- *                 code:
- *                    type: integer
- *                    example: 401
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               message: Unauthorized
+ *               code: 401
  */
 
 /**
@@ -176,25 +164,17 @@ module.exports = router;
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: No refresh token found in the cookies!
- *                 code:
- *                    type: integer
- *                    example: 401
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               message: No refresh token found in the cookies!
+ *               code: 401
  *       "403":
  *         description: Forbidden
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Forbidden!
- *                 code:
- *                    type: integer
- *                    example: 403
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *              message: Forbidden!
+ *              code: 403
  */
