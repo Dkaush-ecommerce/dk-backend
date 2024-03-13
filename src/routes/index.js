@@ -29,15 +29,15 @@ const defaultRoutes = [
     route: authRoutes,
   },
   {
-    path: '/cart',
+    path: '/carts',
     route: cartRoutes,
   },
   {
-    path: '/product',
+    path: '/products',
     route: productRoutes,
   },
   {
-    path: '/category',
+    path: '/categories',
     route: categoryRoutes,
   },
 ];

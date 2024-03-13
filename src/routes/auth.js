@@ -85,12 +85,12 @@ module.exports = router;
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - email
- *               - password
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               required:
+ *                  - email
+ *                  - password
  *             properties:
  *               email:
  *                 type: string
@@ -117,9 +117,9 @@ module.exports = router;
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
- *            example:
- *             message: Incorrect email or password
- *             code: 401
+ *             example:
+ *               message: Incorrect email or password
+ *               code: 401
  */
 
 /**

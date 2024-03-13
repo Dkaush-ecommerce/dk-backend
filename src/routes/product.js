@@ -5,16 +5,14 @@ const {
   deleteProduct,
   getProductById,
   getAllProducts,
-  getProductsByCategory,
   getProductBySku,
   getTopProducts,
 } = require('../controllers/product');
 
 const router = express.Router();
 
-router.post('/:id', addProduct);
-router.get('/all', getAllProducts);
-router.get('/category/:id', getProductsByCategory);
+router.post('/', addProduct);
+router.get('/', getAllProducts);
 router.get('/sku/:sku', getProductBySku);
 router.get('/top', getTopProducts);
 router.get('/:id', getProductById);
@@ -32,7 +30,7 @@ module.exports = router;
 
 /**
  * @swagger
- * /product/all:
+ * /products:
  *   get:
  *     summary: Get all products
  *     tags: [Product]
@@ -63,7 +61,7 @@ module.exports = router;
 
 /**
  * @swagger
- * /product/{id}:
+ * /products/{id}:
  *   post:
  *     summary: Add a new product
  *     tags: [Product]
@@ -84,7 +82,7 @@ module.exports = router;
 
 /**
  * @swagger
- * /product/{id}:
+ * /products/{id}:
  *   get:
  *     summary: Get a product by ID
  *     tags: [Product]

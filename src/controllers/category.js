@@ -22,9 +22,20 @@ const deleteCategory = catchAsync(async (req, res) => {
   res.status(StatusCodes.NO_CONTENT).send();
 });
 
+const getProductsByCategory = catchAsync(async (req, res) => {
+  const { pageSize, page } = req.query;
+  const products = await categoryService.getProductsByCategory(
+    req.body.category,
+    page,
+    pageSize
+  );
+  res.status(StatusCodes.OK).json({ products });
+});
+
 module.exports = {
   getAllCategories,
   addCategory,
   deleteCategory,
   getCategoryById,
+  getProductsByCategory,
 };
