@@ -34,9 +34,42 @@ const deleteCategory = async (categoryId) => {
   }
 };
 
+const getProductsByCategory = async (categoryId, page, pageSize) => {
+  const skip = (page - 1) * pageSize;
+  // Aggregation pipeline to paginate products array
+  const aggregate = await ProductCategory.aggregate([
+    // Match product category by some condition if needed
+    { $match: { _id: categoryId } },
+    // Unwind the products array to de-normalize
+    { $unwind: '$products' },
+    // Skip and limit to implement pagination
+    { $skip: skip },
+    { $limit: pageSize },
+    // Populate the product field
+    {
+      $lookup: {
+        from: 'Product', // Assuming 'products' is the collection name
+        localField: 'products', // Field in productCategory
+        foreignField: '_id', // Field in products collection
+        as: 'products', // Field to populate products
+      },
+    },
+    // Group back to the original format
+    {
+      $group: {
+        _id: '$_id',
+        products: { $push: '$products' },
+      },
+    },
+  ]);
+  console.log(aggregate);
+  // return category.products;
+};
+
 module.exports = {
   getAllCategories,
   addCategory,
   deleteCategory,
   getCategoryById,
+  getProductsByCategory,
 };

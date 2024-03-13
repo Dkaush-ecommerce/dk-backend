@@ -45,3 +45,11 @@ components:
           $ref: '#/components/schemas/User'
         tokens:
           $ref: '#/components/schemas/AuthTokens'
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: number
+        message:
+          type: string
