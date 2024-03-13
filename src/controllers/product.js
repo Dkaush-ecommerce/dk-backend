@@ -25,18 +25,8 @@ const getProductById = catchAsync(async (req, res) => {
   res.status(StatusCodes.OK).json({ product });
 });
 
-const getProductsByCategory = catchAsync(async (req, res) => {
-  const { pageSize, page } = req.query;
-  const products = await productService.getProductsByCategory(
-    req.body.category,
-    page,
-    pageSize
-  );
-  res.status(StatusCodes.OK).json({ products });
-});
-
 const getProductBySku = catchAsync(async (req, res) => {
-  const product = await productService.getProductBySku(req.body.sku);
+  const product = await productService.getProductBySku(req.params.sku);
   res.status(StatusCodes.OK).json({ product });
 });
 
@@ -48,7 +38,6 @@ module.exports = {
   deleteProduct,
   getProductById,
   getAllProducts,
-  getProductsByCategory,
   getProductBySku,
   getTopProducts,
 };
