@@ -53,6 +53,24 @@ const getProductBySku = async (sku) => {
   return product;
 };
 
+const getCategoriesByProduct = async (productId) => {
+  const categories = await ProductCategory.aggregate([
+    { $match: { productId: mongoose.Types.ObjectId(productId) } },
+    {
+      $lookup: {
+        from: 'categories',
+        localField: 'categoryId',
+        foreignField: '_id',
+        as: 'category',
+      },
+    },
+    { $unwind: '$category' },
+    { $match: { 'category.active': true } },
+  ]);
+  console.log(categories);
+  return categories;
+};
+
 const getTopProducts = async () => {};
 
 module.exports = {
@@ -63,4 +81,5 @@ module.exports = {
   getProductBySku,
   getTopProducts,
   getAllProducts,
+  getCategoriesByProduct,
 };

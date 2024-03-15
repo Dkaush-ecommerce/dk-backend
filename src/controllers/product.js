@@ -30,6 +30,11 @@ const getProductBySku = catchAsync(async (req, res) => {
   res.status(StatusCodes.OK).json({ product });
 });
 
+const getCategoriesByProduct = catchAsync(async (req, res) => {
+  const categories = await productService.getCategoriesByProduct(req.params.id);
+  res.status(StatusCodes.OK).json({ categories });
+});
+
 const getTopProducts = catchAsync(async (req, res) => {});
 
 module.exports = {
@@ -40,4 +45,5 @@ module.exports = {
   getAllProducts,
   getProductBySku,
   getTopProducts,
+  getCategoriesByProduct,
 };
