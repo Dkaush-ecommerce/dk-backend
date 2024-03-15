@@ -1,5 +1,6 @@
 const { StatusCodes } = require('http-status-codes');
 const Product = require('../../db/models/Product');
+const ProductCategory = require('../../db/models/ProductCategory');
 const generateSku = require('./generateSku');
 const ApiError = require('../../errors/ApiError');
 
