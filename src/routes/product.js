@@ -7,6 +7,7 @@ const {
   getAllProducts,
   getProductBySku,
   getTopProducts,
+  getCategoriesByProduct,
 } = require('../controllers/product');
 
 const router = express.Router();
@@ -14,6 +15,7 @@ const router = express.Router();
 router.post('/', addProduct);
 router.get('/', getAllProducts);
 router.get('/sku/:sku', getProductBySku);
+router.get('/:id/categories', getCategoriesByProduct);
 router.get('/top', getTopProducts);
 router.get('/:id', getProductById);
 router.put('/:id', updateProduct);

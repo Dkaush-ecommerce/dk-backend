@@ -1,9 +1,9 @@
 const { StatusCodes } = require('http-status-codes');
-const ProductCategory = require('../../db/models/ProductCategory');
+const Category = require('../../db/models/Category');
 const ApiError = require('../../errors/ApiError');
 
 const getAllCategories = async () => {
-  const categories = await ProductCategory.find();
+  const categories = await Category.find();
   if (!categories) {
     throw new ApiError(StatusCodes.NOT_FOUND, 'No categories found!');
   }
@@ -11,7 +11,7 @@ const getAllCategories = async () => {
 };
 
 const getCategoryById = async (id) => {
-  const category = await ProductCategory.findById(id);
+  const category = await Category.findById(id);
   if (!category) {
     throw new ApiError(StatusCodes.NOT_FOUND, 'Category not found!');
   }
@@ -28,7 +28,7 @@ const addCategory = async (category) => {
 };
 
 const deleteCategory = async (categoryId) => {
-  const category = await ProductCategory.findByIdAndDelete(categoryId);
+  const category = await Category.findByIdAndDelete(categoryId);
   if (!category) {
     throw new ApiError(StatusCodes.NOT_FOUND, 'Category not found!');
   }
@@ -36,34 +36,11 @@ const deleteCategory = async (categoryId) => {
 
 const getProductsByCategory = async (categoryId, page, pageSize) => {
   const skip = (page - 1) * pageSize;
-  // Aggregation pipeline to paginate products array
-  const aggregate = await ProductCategory.aggregate([
-    // Match product category by some condition if needed
-    { $match: { _id: categoryId } },
-    // Unwind the products array to de-normalize
-    { $unwind: '$products' },
-    // Skip and limit to implement pagination
-    { $skip: skip },
-    { $limit: pageSize },
-    // Populate the product field
-    {
-      $lookup: {
-        from: 'Product', // Assuming 'products' is the collection name
-        localField: 'products', // Field in productCategory
-        foreignField: '_id', // Field in products collection
-        as: 'products', // Field to populate products
-      },
-    },
-    // Group back to the original format
-    {
-      $group: {
-        _id: '$_id',
-        products: { $push: '$products' },
-      },
-    },
-  ]);
-  console.log(aggregate);
-  // return category.products;
+  const products = await ProductCategory.find({ categoryId })
+    .populate('productId')
+    .skip(skip)
+    .limit(pageSize);
+  return products;
 };
 
 module.exports = {
