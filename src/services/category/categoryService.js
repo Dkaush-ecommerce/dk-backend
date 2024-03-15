@@ -1,5 +1,6 @@
 const { StatusCodes } = require('http-status-codes');
 const Category = require('../../db/models/Category');
+const ProductCategory = require('../../db/models/ProductCategory');
 const ApiError = require('../../errors/ApiError');
 
 const getAllCategories = async () => {
@@ -36,10 +37,21 @@ const deleteCategory = async (categoryId) => {
 
 const getProductsByCategory = async (categoryId, page, pageSize) => {
   const skip = (page - 1) * pageSize;
-  const products = await ProductCategory.find({ categoryId })
-    .populate('productId')
-    .skip(skip)
-    .limit(pageSize);
+  const products = await ProductCategory.aggregate([
+    { $match: { categoryId: mongoose.Types.ObjectId(categoryId) } },
+    {
+      $lookup: {
+        from: 'products',
+        localField: 'productId',
+        foreignField: '_id',
+        as: 'product',
+      },
+    },
+    { $unwind: '$product' },
+    { $match: { 'product.isActive': true } },
+    { $skip: skip },
+    { $limit: pageSize },
+  ]);
   return products;
 };
 

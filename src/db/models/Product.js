@@ -12,16 +12,16 @@ const productSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
     inStock: {
       type: Number,
       required: true,
     },
     description: {
       type: String,
-      required: true,
-    },
-    marked_price: {
-      type: Number,
       required: true,
     },
     price: {
