@@ -77,7 +77,14 @@ const getTopProducts = async () => {};
 
 const bulkAddProducts = async (fileObj) => {
   const products = await parseCSV(fileObj.originalname);
-  await Product.insertMany(products);
+  try {
+    await Product.insertMany(products);
+  } catch (e) {
+    throw new ApiError(
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      'Please check the file and try again!'
+    );
+  }
   return products.length;
 };
 
