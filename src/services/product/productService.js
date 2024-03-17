@@ -1,8 +1,9 @@
 const { StatusCodes } = require('http-status-codes');
 const Product = require('../../db/models/Product');
 const ProductCategory = require('../../db/models/ProductCategory');
-const generateSku = require('./generateSku');
+const generateSku = require('../../utils/generateSku');
 const ApiError = require('../../errors/ApiError');
+const parseCSV = require('../../utils/parseCsv');
 
 const getAllProducts = async (page, pageSize) => {
   const skip = (page - 1) * pageSize;
@@ -74,6 +75,12 @@ const getCategoriesByProduct = async (productId) => {
 
 const getTopProducts = async () => {};
 
+const bulkAddProducts = async (fileObj) => {
+  const products = await parseCSV(fileObj.originalname);
+  await Product.insertMany(products);
+  return products.length;
+};
+
 module.exports = {
   addProduct,
   updateProduct,
@@ -83,4 +90,5 @@ module.exports = {
   getTopProducts,
   getAllProducts,
   getCategoriesByProduct,
+  bulkAddProducts,
 };

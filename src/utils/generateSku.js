@@ -1,5 +1,10 @@
-function generateSku() {
-  const randomNumber = Math.floor(Math.random() * 10000000);
+function generateSku(sku) {
+  let randomNumber;
+  if (sku) {
+    randomNumber = sku;
+  } else {
+    randomNumber = Math.floor(Math.random() * 10000000);
+  }
   let formattedNumber = randomNumber.toString();
 
   if (formattedNumber.length < 7) {
