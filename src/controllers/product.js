@@ -37,6 +37,17 @@ const getCategoriesByProduct = catchAsync(async (req, res) => {
 
 const getTopProducts = catchAsync(async (req, res) => {});
 
+const bulkAddProducts = catchAsync(async (req, res) => {
+  if (!req.file) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Please upload a file');
+  }
+  const totalProducts = await productService.bulkAddProducts(req.file);
+  console.log(totalProducts);
+  res
+    .status(StatusCodes.CREATED)
+    .json({ message: `Successfully added ${totalProducts} products!` });
+});
+
 module.exports = {
   addProduct,
   updateProduct,
@@ -46,4 +57,5 @@ module.exports = {
   getProductBySku,
   getTopProducts,
   getCategoriesByProduct,
+  bulkAddProducts,
 };
