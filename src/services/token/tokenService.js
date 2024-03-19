@@ -5,7 +5,7 @@ const tokenTypes = require('./token.types');
 
 const generateToken = (user, expires, type, secret = envConfig.jwt.secret) => {
   const payload = {
-    sub: user,
+    user: user,
     iat: moment().unix(),
     exp: expires.unix(),
     type,
