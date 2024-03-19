@@ -1,7 +1,9 @@
 const { StatusCodes } = require('http-status-codes');
 const Product = require('../../db/models/Product');
-const generateSku = require('./generateSku');
+const ProductCategory = require('../../db/models/ProductCategory');
+const generateSku = require('../../utils/generateSku');
 const ApiError = require('../../errors/ApiError');
+const parseCSV = require('../../utils/parseCsv');
 
 const getAllProducts = async (page, pageSize) => {
   const skip = (page - 1) * pageSize;
@@ -73,6 +75,19 @@ const getCategoriesByProduct = async (productId) => {
 
 const getTopProducts = async () => {};
 
+const bulkAddProducts = async (fileObj) => {
+  const products = await parseCSV(fileObj.originalname);
+  try {
+    await Product.insertMany(products);
+  } catch (e) {
+    throw new ApiError(
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      'Please check the file and try again!'
+    );
+  }
+  return products.length;
+};
+
 module.exports = {
   addProduct,
   updateProduct,
@@ -82,4 +97,5 @@ module.exports = {
   getTopProducts,
   getAllProducts,
   getCategoriesByProduct,
+  bulkAddProducts,
 };

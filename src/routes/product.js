@@ -1,4 +1,6 @@
 const express = require('express');
+const multer = require('multer');
+const fs = require('fs');
 const {
   addProduct,
   updateProduct,
@@ -8,11 +10,26 @@ const {
   getProductBySku,
   getTopProducts,
   getCategoriesByProduct,
+  bulkAddProducts,
 } = require('../controllers/product');
 
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    if (!fs.existsSync('uploads')) {
+      fs.mkdirSync('uploads');
+    }
+    cb(null, './uploads');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
 const router = express.Router();
 
 router.post('/', addProduct);
+router.post('/bulk', upload.single(), bulkAddProducts);
 router.get('/', getAllProducts);
 router.get('/sku/:sku', getProductBySku);
 router.get('/:id/categories', getCategoriesByProduct);
