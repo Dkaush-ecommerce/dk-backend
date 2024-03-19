@@ -24,9 +24,9 @@ const addProduct = async (product) => {
     }
   }
   newProduct.sku = sku;
-
   // process images
 
+  await newProduct.save();
   return newProduct;
 };
 

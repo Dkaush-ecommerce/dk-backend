@@ -3,8 +3,8 @@ const catchAsync = require('../utils/catchAsync');
 const productService = require('../services/product/productService');
 
 const getAllProducts = catchAsync(async (req, res) => {
-  const { page, pageSize } = req.query;
-  const products = await productService.getAllProducts(page, pageSize);
+  const { page, limit } = req.query;
+  const products = await productService.getAllProducts(page, limit);
   res.status(StatusCodes.OK).json({ products });
 });
 
