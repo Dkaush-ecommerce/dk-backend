@@ -10,17 +10,21 @@ const tokenService = require('./tokenService');
 const tokenTypes = require('../utils/constants/tokenTypes');
 
 const signup = async (userObj) => {
-  if (await User.isEmailTaken(userObj.email)) {
-    throw new ApiError(StatusCodes.BAD_REQUEST, 'Email already taken!');
+  try {
+    if (await User.isEmailTaken(userObj.email)) {
+      throw new ApiError(StatusCodes.BAD_REQUEST, 'Email already taken!');
+    }
+    const hashedPassword = await bcrypt.hash(userObj.password, 12);
+    const user = await User.create({
+      email: userObj.email,
+      password: hashedPassword,
+      firstName: userObj.firstName,
+      lastName: userObj.lastName,
+    });
+    return user;
+  } catch (error) {
+    throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
   }
-  const hashedPassword = await bcrypt.hash(userObj.password, 12);
-  const user = await User.create({
-    email: userObj.email,
-    password: hashedPassword,
-    firstName: userObj.firstName,
-    lastName: userObj.lastName,
-  });
-  return user;
 };
 
 const loginWithEmailAndPassword = async (email, password) => {

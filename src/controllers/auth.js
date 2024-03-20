@@ -1,9 +1,10 @@
 const { StatusCodes } = require('http-status-codes');
-const authService = require('../services/auth/authService');
-const tokenService = require('../services/token/tokenService');
+const authService = require('../services/authService');
+const tokenService = require('../services/tokenService');
 const catchAsync = require('../utils/catchAsync');
 const { setCookie, clearCookie } = require('../common/cookie');
-const { getUserByRefreshToken } = require('../services/user/userService');
+const { getUserByRefreshToken } = require('../services/userService');
+const emailQueue = require('../bullmq/queues/email');
 
 const signup = catchAsync(async (req, res) => {
   const user = await authService.signup(req.body);
@@ -14,12 +15,20 @@ const signup = catchAsync(async (req, res) => {
     email: user.email,
     role: req.params.role,
   };
+  console.log(userDetails);
+
   const { refreshToken, accessToken } = await tokenService.generateAuthTokens(
     userDetails
   );
+  console.log(refreshToken, accessToken);
   user.refreshToken = refreshToken;
   await user.save();
   setCookie(res, 'jwt', refreshToken);
+  await emailQueue.add(`newuser:${userDetails.id}`, {
+    email: userDetails.email,
+    subject: 'Welcome to our platform',
+    message: `Hi ${userDetails.firstName}, welcome to our platform!`,
+  });
   return res.status(StatusCodes.CREATED).send({
     user: userDetails,
     token: accessToken,
