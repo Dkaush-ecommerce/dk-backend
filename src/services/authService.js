@@ -2,15 +2,12 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const moment = require('moment');
 const { StatusCodes } = require('http-status-codes');
-const User = require('../../db/models/User');
-const ApiError = require('../../errors/ApiError');
-const {
-  getUserByEmail,
-  getUserByRefreshToken,
-} = require('../user/userService');
-const envConfig = require('../../config/env');
-const tokenService = require('../token/tokenService');
-const tokenTypes = require('../token/token.types');
+const User = require('../db/models/User');
+const ApiError = require('../errors/ApiError');
+const { getUserByEmail, getUserByRefreshToken } = require('./userService');
+const envConfig = require('../config/env');
+const tokenService = require('./tokenService');
+const tokenTypes = require('../utils/constants/tokenTypes');
 
 const signup = async (userObj) => {
   if (await User.isEmailTaken(userObj.email)) {
