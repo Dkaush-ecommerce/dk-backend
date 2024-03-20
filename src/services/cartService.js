@@ -1,7 +1,7 @@
 const { StatusCodes } = require('http-status-codes');
-const productService = require('../product/productService');
-const ApiError = require('../../errors/ApiError');
-const { getUserById } = require('../user/userService');
+const productService = require('./productService');
+const ApiError = require('../errors/ApiError');
+const { getUserById } = require('./userService');
 
 const addToCart = async (productId, userId) => {
   const product = await productService.getProductById(productId);

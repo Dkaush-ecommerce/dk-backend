@@ -1,6 +1,6 @@
 const { StatusCodes } = require('http-status-codes');
 const catchAsync = require('../utils/catchAsync');
-const categoryService = require('../services/category/categoryService');
+const categoryService = require('../services/categoryService');
 
 const getAllCategories = catchAsync(async (req, res) => {
   const categories = await categoryService.getAllCategories();

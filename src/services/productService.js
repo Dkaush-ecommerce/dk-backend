@@ -1,9 +1,9 @@
 const { StatusCodes } = require('http-status-codes');
-const Product = require('../../db/models/Product');
-const ProductCategory = require('../../db/models/ProductCategory');
-const generateSku = require('../../utils/generateSku');
-const ApiError = require('../../errors/ApiError');
-const parseCSV = require('../../utils/parseCsv');
+const Product = require('../db/models/Product');
+const ProductCategory = require('../db/models/ProductCategory');
+const generateSku = require('../utils/generateSku');
+const ApiError = require('../errors/ApiError');
+const parseCSV = require('../utils/parseCsv');
 
 const getAllProducts = async (page, pageSize) => {
   const skip = (page - 1) * pageSize;

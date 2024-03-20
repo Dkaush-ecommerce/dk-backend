@@ -1,7 +1,7 @@
 const { StatusCodes } = require('http-status-codes');
-const Category = require('../../db/models/Category');
-const ProductCategory = require('../../db/models/ProductCategory');
-const ApiError = require('../../errors/ApiError');
+const Category = require('../db/models/Category');
+const ProductCategory = require('../db/models/ProductCategory');
+const ApiError = require('../errors/ApiError');
 
 const getAllCategories = async () => {
   const categories = await Category.find();

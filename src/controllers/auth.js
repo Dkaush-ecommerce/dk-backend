@@ -12,6 +12,7 @@ const signup = catchAsync(async (req, res) => {
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.email,
+    role: req.params.role,
   };
   const { refreshToken, accessToken } = await tokenService.generateAuthTokens(
     userDetails
@@ -33,6 +34,7 @@ const login = catchAsync(async (req, res) => {
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.email,
+    role: req.params.role,
   };
   const { refreshToken, accessToken } = await tokenService.generateAuthTokens(
     userDetails
