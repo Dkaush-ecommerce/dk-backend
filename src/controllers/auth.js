@@ -1,9 +1,9 @@
 const { StatusCodes } = require('http-status-codes');
-const authService = require('../services/auth/authService');
-const tokenService = require('../services/token/tokenService');
+const authService = require('../services/authService');
+const tokenService = require('../services/tokenService');
 const catchAsync = require('../utils/catchAsync');
 const { setCookie, clearCookie } = require('../common/cookie');
-const { getUserByRefreshToken } = require('../services/user/userService');
+const { getUserByRefreshToken } = require('../services/userService');
 
 const signup = catchAsync(async (req, res) => {
   const user = await authService.signup(req.body);

@@ -1,5 +1,5 @@
 const { StatusCodes } = require('http-status-codes');
-const cartService = require('../services/cart/cartService');
+const cartService = require('../services/cartService');
 const catchAsync = require('../utils/catchAsync');
 
 const addToCart = catchAsync(async (req, res) => {
