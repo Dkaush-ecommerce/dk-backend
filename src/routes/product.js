@@ -1,4 +1,6 @@
 const express = require('express');
+const multer = require('multer');
+const fs = require('fs');
 const {
   addProduct,
   updateProduct,
@@ -7,17 +9,43 @@ const {
   getAllProducts,
   getProductBySku,
   getTopProducts,
+  getCategoriesByProduct,
+  bulkAddProducts,
 } = require('../controllers/product');
+const verifyJWT = require('../middlewares/verifyJwt');
+const authRole = require('../middlewares/authRole');
+const ROLES = require('../utils/constants/roles');
 
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    if (!fs.existsSync('uploads')) {
+      fs.mkdirSync('uploads');
+    }
+    cb(null, './uploads');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
 const router = express.Router();
 
-router.post('/', addProduct);
+router.post('/', verifyJWT, authRole(ROLES.ADMIN), addProduct);
+router.post(
+  '/bulk',
+  verifyJWT,
+  authRole(ROLES.ADMIN),
+  upload.single(),
+  bulkAddProducts
+);
 router.get('/', getAllProducts);
 router.get('/sku/:sku', getProductBySku);
+router.get('/:id/categories', getCategoriesByProduct);
 router.get('/top', getTopProducts);
 router.get('/:id', getProductById);
-router.put('/:id', updateProduct);
-router.delete('/:id', deleteProduct);
+router.put('/:id', verifyJWT, authRole(ROLES.ADMIN), updateProduct);
+router.delete('/:id', verifyJWT, authRole(ROLES.ADMIN), deleteProduct);
 
 module.exports = router;
 

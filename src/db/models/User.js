@@ -28,7 +28,7 @@ const userSchema = mongoose.Schema(
       type: String,
       default: '',
     },
-    cart: cartSchema,
+    cart: { type: cartSchema, default: {} },
     wishlist: {
       type: Array,
       of: mongoose.Schema.Types.ObjectId,

@@ -1,10 +1,10 @@
 const { StatusCodes } = require('http-status-codes');
 const catchAsync = require('../utils/catchAsync');
-const productService = require('../services/product/productService');
+const productService = require('../services/productService');
 
 const getAllProducts = catchAsync(async (req, res) => {
-  const { page, pageSize } = req.query;
-  const products = await productService.getAllProducts(page, pageSize);
+  const { page, limit } = req.query;
+  const products = await productService.getAllProducts(page, limit);
   res.status(StatusCodes.OK).json({ products });
 });
 
@@ -30,7 +30,23 @@ const getProductBySku = catchAsync(async (req, res) => {
   res.status(StatusCodes.OK).json({ product });
 });
 
+const getCategoriesByProduct = catchAsync(async (req, res) => {
+  const categories = await productService.getCategoriesByProduct(req.params.id);
+  res.status(StatusCodes.OK).json({ categories });
+});
+
 const getTopProducts = catchAsync(async (req, res) => {});
+
+const bulkAddProducts = catchAsync(async (req, res) => {
+  if (!req.file) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Please upload a file');
+  }
+  const totalProducts = await productService.bulkAddProducts(req.file);
+  console.log(totalProducts);
+  res
+    .status(StatusCodes.CREATED)
+    .json({ message: `Successfully added ${totalProducts} products!` });
+});
 
 module.exports = {
   addProduct,
@@ -40,4 +56,6 @@ module.exports = {
   getAllProducts,
   getProductBySku,
   getTopProducts,
+  getCategoriesByProduct,
+  bulkAddProducts,
 };

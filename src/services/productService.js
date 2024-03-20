@@ -1,7 +1,9 @@
 const { StatusCodes } = require('http-status-codes');
-const Product = require('../../db/models/Product');
-const generateSku = require('./generateSku');
-const ApiError = require('../../errors/ApiError');
+const Product = require('../db/models/Product');
+const ProductCategory = require('../db/models/ProductCategory');
+const generateSku = require('../utils/generateSku');
+const ApiError = require('../errors/ApiError');
+const parseCSV = require('../utils/parseCsv');
 
 const getAllProducts = async (page, pageSize) => {
   const skip = (page - 1) * pageSize;
@@ -22,9 +24,9 @@ const addProduct = async (product) => {
     }
   }
   newProduct.sku = sku;
-
   // process images
 
+  await newProduct.save();
   return newProduct;
 };
 
@@ -53,7 +55,38 @@ const getProductBySku = async (sku) => {
   return product;
 };
 
+const getCategoriesByProduct = async (productId) => {
+  const categories = await ProductCategory.aggregate([
+    { $match: { productId: mongoose.Types.ObjectId(productId) } },
+    {
+      $lookup: {
+        from: 'categories',
+        localField: 'categoryId',
+        foreignField: '_id',
+        as: 'category',
+      },
+    },
+    { $unwind: '$category' },
+    { $match: { 'category.active': true } },
+  ]);
+  console.log(categories);
+  return categories;
+};
+
 const getTopProducts = async () => {};
+
+const bulkAddProducts = async (fileObj) => {
+  const products = await parseCSV(fileObj.originalname);
+  try {
+    await Product.insertMany(products);
+  } catch (e) {
+    throw new ApiError(
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      'Please check the file and try again!'
+    );
+  }
+  return products.length;
+};
 
 module.exports = {
   addProduct,
@@ -63,4 +96,6 @@ module.exports = {
   getProductBySku,
   getTopProducts,
   getAllProducts,
+  getCategoriesByProduct,
+  bulkAddProducts,
 };

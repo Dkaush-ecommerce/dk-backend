@@ -1,6 +1,6 @@
 const { StatusCodes } = require('http-status-codes');
 const catchAsync = require('../utils/catchAsync');
-const categoryService = require('../services/category/categoryService');
+const categoryService = require('../services/categoryService');
 
 const getAllCategories = catchAsync(async (req, res) => {
   const categories = await categoryService.getAllCategories();
@@ -23,11 +23,11 @@ const deleteCategory = catchAsync(async (req, res) => {
 });
 
 const getProductsByCategory = catchAsync(async (req, res) => {
-  const { pageSize, page } = req.query;
+  const { limit, page } = req.query;
   const products = await categoryService.getProductsByCategory(
     req.body.category,
     page,
-    pageSize
+    limit
   );
   res.status(StatusCodes.OK).json({ products });
 });

@@ -1,11 +1,11 @@
 const moment = require('moment');
 const jwt = require('jsonwebtoken');
-const envConfig = require('../../config/env');
-const tokenTypes = require('./token.types');
+const envConfig = require('../config/env');
+const tokenTypes = require('../utils/constants/tokenTypes');
 
 const generateToken = (user, expires, type, secret = envConfig.jwt.secret) => {
   const payload = {
-    sub: user,
+    user: user,
     iat: moment().unix(),
     exp: expires.unix(),
     type,
