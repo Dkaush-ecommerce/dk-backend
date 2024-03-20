@@ -1,6 +1,6 @@
 const { StatusCodes } = require('http-status-codes');
 const catchAsync = require('../utils/catchAsync');
-const productService = require('../services/product/productService');
+const productService = require('../services/productService');
 
 const getAllProducts = catchAsync(async (req, res) => {
   const { page, limit } = req.query;
