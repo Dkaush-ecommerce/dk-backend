@@ -47,6 +47,8 @@ const getProductById = async (id) => {
   return product;
 };
 
+const filterProducts = async (categories, maxprice, minprice) => {};
+
 const getProductBySku = async (sku) => {
   const product = await Product.find({ sku });
   if (!product) {

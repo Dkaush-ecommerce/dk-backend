@@ -8,6 +8,8 @@ const getAllProducts = catchAsync(async (req, res) => {
   res.status(StatusCodes.OK).json({ products });
 });
 
+const filterProducts = catchAsync(async (req, res) => {});
+
 const addProduct = catchAsync(async (req, res) => {
   const product = await productService.addProduct(req.body);
   res.status(StatusCodes.CREATED).json({ product });
@@ -58,4 +60,5 @@ module.exports = {
   getTopProducts,
   getCategoriesByProduct,
   bulkAddProducts,
+  filterProducts,
 };
