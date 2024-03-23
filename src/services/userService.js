@@ -1,4 +1,5 @@
 const User = require('../db/models/User');
+const logger = require('../logger');
 
 const getUserById = async (id) => User.findById(id);
 
@@ -12,9 +13,26 @@ const getUserCartProducts = async (userId) => {
   return cart;
 };
 
+const getWishlist = async (userId) => {
+  try {
+    const user = await User.findById(userId);
+    const wishlist = user.wishlist;
+    const productIds = wishlist.map((item) => item.productId);
+    const products = await Product.find({ _id: { $in: productIds } });
+    return products;
+  } catch (error) {
+    logger.error(error.message);
+    throw new ApiError(
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      'Error fetching wishlist!'
+    );
+  }
+};
+
 module.exports = {
   getUserById,
   getUserByEmail,
   getUserByRefreshToken,
   getUserCartProducts,
+  getWishlist,
 };
