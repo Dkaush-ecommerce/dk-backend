@@ -2,6 +2,7 @@ const express = require('express');
 const docsRoute = require('./swagger');
 const envConfig = require('../config/env');
 const authRoutes = require('./auth');
+const userRoutes = require('./user');
 const cartRoutes = require('./cart');
 const productRoutes = require('./product');
 const categoryRoutes = require('./category');
@@ -27,6 +28,10 @@ const defaultRoutes = [
   {
     path: '/auth',
     route: authRoutes,
+  },
+  {
+    path: '/users',
+    route: userRoutes,
   },
   {
     path: '/carts',
