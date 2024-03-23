@@ -5,8 +5,7 @@ const generateSku = require('../utils/generateSku');
 const ApiError = require('../errors/ApiError');
 const parseCSV = require('../utils/parseCsv');
 
-const MAX_PRICE = 5000,
-  MIN_PRICE = 0;
+const MIN_PRICE = 0;
 
 const getAllProducts = async (
   page,
@@ -28,7 +27,7 @@ const getAllProducts = async (
   } else if (maxPrice !== undefined) {
     query.markedPrice = { $gte: MIN_PRICE, $lte: maxPrice };
   } else if (minPrice !== undefined) {
-    query.markedPrice = { $gte: minPrice, $lte: MAX_PRICE };
+    query.markedPrice = { $gte: minPrice };
   }
 
   const skip = (page - 1) * pageSize;
