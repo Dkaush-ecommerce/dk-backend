@@ -7,7 +7,7 @@ const categorySchema = mongoose.Schema(
       required: true,
       trim: true,
     },
-    active: {
+    isActive: {
       type: Boolean,
       default: true,
     },

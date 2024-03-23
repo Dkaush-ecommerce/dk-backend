@@ -5,9 +5,43 @@ const generateSku = require('../utils/generateSku');
 const ApiError = require('../errors/ApiError');
 const parseCSV = require('../utils/parseCsv');
 
-const getAllProducts = async (page, pageSize) => {
+const MAX_PRICE = 5000,
+  MIN_PRICE = 0;
+
+const getAllProducts = async (
+  page,
+  pageSize,
+  q,
+  categoryIds,
+  maxPrice,
+  minPrice
+) => {
+  let query = {};
+
+  if (q) {
+    const searchRegex = new RegExp(`^${q}| ${q}`, 'i');
+    query.$or = [{ name: searchRegex }, { sku: searchRegex }];
+  }
+
+  if (maxPrice !== undefined && minPrice !== undefined) {
+    query.markedPrice = { $gte: minPrice, $lte: maxPrice };
+  } else if (maxPrice !== undefined) {
+    query.markedPrice = { $gte: MIN_PRICE, $lte: maxPrice };
+  } else if (minPrice !== undefined) {
+    query.markedPrice = { $gte: minPrice, $lte: MAX_PRICE };
+  }
+
   const skip = (page - 1) * pageSize;
-  const products = await Product.find().skip(skip).limit(pageSize);
+  const limit = pageSize;
+
+  let products = await Product.find(query).skip(skip).limit(limit).exec();
+
+  if (categoryIds && categoryIds.length > 0) {
+    products = await ProductCategory.find({
+      categoryId: { $in: categoryIds },
+    }).populate('productId');
+  }
+
   return products;
 };
 
@@ -17,7 +51,6 @@ const addProduct = async (product) => {
   let sku;
   while (true) {
     sku = generateSku();
-    // check if product with same sku exists
     const existingProduct = await Product.findOne({ sku });
     if (!existingProduct) {
       break;
@@ -30,7 +63,11 @@ const addProduct = async (product) => {
   return newProduct;
 };
 
-const updateProduct = async () => {};
+const updateProduct = async (productId, product) => {
+  const product = await Product.findByIdAndUpdate({ _id: productId }, product, {
+    new: true,
+  });
+};
 
 const deleteProduct = async (id) => {
   const product = await Product.findByIdAndDelete(id);
@@ -46,8 +83,6 @@ const getProductById = async (id) => {
   }
   return product;
 };
-
-const filterProducts = async (categories, maxprice, minprice) => {};
 
 const getProductBySku = async (sku) => {
   const product = await Product.find({ sku });

@@ -17,6 +17,16 @@ const addCategory = catchAsync(async (req, res) => {
   res.status(StatusCodes.CREATED).json({ category });
 });
 
+const updateCategory = catchAsync(async (req, res) => {
+  const category = await categoryService.updateCategory(
+    req.params.id,
+    req.body
+  );
+  res
+    .status(StatusCodes.OK)
+    .json({ category, message: 'Category updated successfully!' });
+});
+
 const deleteCategory = catchAsync(async (req, res) => {
   await categoryService.deleteCategory(req.params.id);
   res.status(StatusCodes.NO_CONTENT).send();
@@ -38,4 +48,5 @@ module.exports = {
   deleteCategory,
   getCategoryById,
   getProductsByCategory,
+  updateCategory,
 };
