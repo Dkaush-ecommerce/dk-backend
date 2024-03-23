@@ -7,19 +7,22 @@ const categorySchema = mongoose.Schema(
       required: true,
       trim: true,
     },
-    isActive: {
-      type: Boolean,
-      default: true,
-    },
-    parentCategory: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'ProductCategory',
-      default: null,
-    },
-    description: {
+    code: {
       type: String,
+      required: true,
       trim: true,
-      default: '',
+    },
+    expires: {
+      type: Number,
+      required: true,
+    },
+    products: {
+      type: [mongoose.Types.ObjectId],
+      default: [],
+    },
+    categories: {
+      type: [mongoose.Types.ObjectId],
+      default: [],
     },
   },
   { timestamps: { createdAt: true } }
