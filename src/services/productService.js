@@ -45,7 +45,7 @@ const getAllProducts = async (
 };
 
 const addProduct = async (product) => {
-  const newProduct = new Product(product);
+  const newProduct = new Product({ ...product, price: product.markedPrice });
 
   let sku;
   while (true) {
