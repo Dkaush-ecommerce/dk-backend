@@ -3,19 +3,29 @@ const catchAsync = require('../utils/catchAsync');
 const productService = require('../services/productService');
 
 const getAllProducts = catchAsync(async (req, res) => {
-  const { page, limit } = req.query;
-  const products = await productService.getAllProducts(page, limit);
+  const { page, limit, q, categories, maxprice, minprice } = req.query;
+  const products = await productService.getAllProducts(
+    page,
+    limit,
+    q,
+    categories,
+    maxprice,
+    minprice
+  );
   res.status(StatusCodes.OK).json({ products });
 });
-
-const filterProducts = catchAsync(async (req, res) => {});
 
 const addProduct = catchAsync(async (req, res) => {
   const product = await productService.addProduct(req.body);
   res.status(StatusCodes.CREATED).json({ product });
 });
 
-const updateProduct = catchAsync(async (req, res) => {});
+const updateProduct = catchAsync(async (req, res) => {
+  const product = await productService.updateProduct(req.params.id, req.body);
+  res
+    .status(StatusCodes.OK)
+    .json({ product, message: 'Product updated successfully!' });
+});
 
 const deleteProduct = catchAsync(async (req, res) => {
   await productService.deleteProduct(req.params.id);
@@ -60,5 +70,4 @@ module.exports = {
   getTopProducts,
   getCategoriesByProduct,
   bulkAddProducts,
-  filterProducts,
 };
