@@ -21,4 +21,4 @@ const productionLogger = () => {
   });
 };
 
-export default productionLogger;
+module.exports = productionLogger;

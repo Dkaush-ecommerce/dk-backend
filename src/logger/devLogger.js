@@ -22,4 +22,4 @@ const devLogger = () => {
   });
 };
 
-export default devLogger;
+module.exports = devLogger;
