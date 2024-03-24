@@ -63,9 +63,13 @@ const addProduct = async (product) => {
 };
 
 const updateProduct = async (productId, product) => {
-  const product = await Product.findByIdAndUpdate({ _id: productId }, product, {
-    new: true,
-  });
+  const updatedProduct = await Product.findByIdAndUpdate(
+    { _id: productId },
+    product,
+    {
+      new: true,
+    }
+  );
 };
 
 const deleteProduct = async (id) => {
