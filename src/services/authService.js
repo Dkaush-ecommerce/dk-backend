@@ -43,7 +43,10 @@ const refresh = async (cookies) => {
 
   let accessToken;
   jwt.verify(refreshToken, envConfig.jwt.secret, (err, decoded) => {
-    if (err || user?.email !== decoded.user?.email) throw new ApiError(StatusCodes.FORBIDDEN, 'Forbidden!'); // Forbidden
+    if (err) {
+      throw new ApiError(StatusCodes.UNAUTHORIZED, 'Session has expired!');
+    }
+    if (user?.email !== decoded.user?.email) throw new ApiError(StatusCodes.FORBIDDEN, 'Forbidden!');
     const accessTokenExpires = moment().add(envConfig.jwt.accessExpirationMinutes, 'minutes');
     accessToken = tokenService.generateToken(
       {
