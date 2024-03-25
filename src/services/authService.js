@@ -36,24 +36,15 @@ const loginWithEmailAndPassword = async (email, password) => {
 };
 
 const refresh = async (cookies) => {
-  if (!cookies?.jwt)
-    throw new ApiError(
-      StatusCodes.UNAUTHORIZED,
-      'No refresh token found in the cookies!'
-    );
+  if (!cookies?.jwt) throw new ApiError(StatusCodes.UNAUTHORIZED, 'No refresh token found in the cookies!');
   const refreshToken = cookies.jwt;
   const user = await getUserByRefreshToken(refreshToken);
   if (!user) throw new ApiError(StatusCodes.UNAUTHORIZED, 'User not found!');
 
   let accessToken;
   jwt.verify(refreshToken, envConfig.jwt.secret, (err, decoded) => {
-    if (err || user?.email !== decoded.sub?.email)
-      throw new ApiError(StatusCodes.FORBIDDEN, 'Forbidden!'); // Forbidden
-    const accessTokenExpires = moment().add(
-      envConfig.jwt.accessExpirationMinutes,
-      'minutes'
-    );
-    console.log(accessTokenExpires);
+    if (err || user?.email !== decoded.user?.email) throw new ApiError(StatusCodes.FORBIDDEN, 'Forbidden!'); // Forbidden
+    const accessTokenExpires = moment().add(envConfig.jwt.accessExpirationMinutes, 'minutes');
     accessToken = tokenService.generateToken(
       {
         id: user._id.toString(),
@@ -62,7 +53,7 @@ const refresh = async (cookies) => {
         email: user.email,
       },
       accessTokenExpires,
-      tokenTypes.ACCESS
+      tokenTypes.ACCESS,
     );
   });
   return accessToken;

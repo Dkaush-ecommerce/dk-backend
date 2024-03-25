@@ -4,21 +4,16 @@ const ProductCategory = require('../db/models/ProductCategory');
 const generateSku = require('../utils/generateSku');
 const ApiError = require('../errors/ApiError');
 const parseCSV = require('../utils/parseCsv');
+const { default: mongoose } = require('mongoose');
+const cleanData = require('../utils/cleanData');
 
 const MIN_PRICE = 0;
 
-const getAllProducts = async (
-  page,
-  pageSize,
-  q,
-  categoryIds,
-  maxPrice,
-  minPrice
-) => {
+const getAllProducts = async (page = 1, pageSize = 20, q, categoryIds, maxPrice, minPrice) => {
   let query = {};
 
   if (q) {
-    const searchRegex = new RegExp(`^${q}| ${q}`, 'i');
+    const searchRegex = new RegExp(`^${q}| ${q}|${q}`, 'i');
     query.$or = [{ name: searchRegex }, { sku: searchRegex }];
   }
 
@@ -41,7 +36,7 @@ const getAllProducts = async (
     }).populate('productId');
   }
 
-  return products;
+  return products.map((product) => cleanData(product._doc));
 };
 
 const addProduct = async (product) => {
@@ -63,13 +58,9 @@ const addProduct = async (product) => {
 };
 
 const updateProduct = async (productId, product) => {
-  const updatedProduct = await Product.findByIdAndUpdate(
-    { _id: productId },
-    product,
-    {
-      new: true,
-    }
-  );
+  const updatedProduct = await Product.findByIdAndUpdate({ _id: productId }, product, {
+    new: true,
+  });
 };
 
 const deleteProduct = async (id) => {
@@ -80,19 +71,34 @@ const deleteProduct = async (id) => {
 };
 
 const getProductById = async (id) => {
-  const product = await Product.findById(id);
+  const product = await Product.findById(id).exec();
+  const categories = [];
+  // const categories = await getCategoriesByProduct(id).populate('categoryId');
   if (!product) {
     throw new ApiError(StatusCodes.NOT_FOUND, 'Product not found!');
   }
-  return product;
+  return { ...cleanData(product._doc), categories };
 };
 
 const getProductBySku = async (sku) => {
   const product = await Product.find({ sku });
+  const categories = await getCategoriesByProduct(id).populate('categoryId');
   if (!product) {
     throw new ApiError(StatusCodes.NOT_FOUND, 'Product not found!');
   }
-  return product;
+  return { ...cleanData(product._doc), categories };
+};
+
+const getTopProducts = async () => {};
+
+const bulkAddProducts = async (fileObj) => {
+  const products = await parseCSV(fileObj.originalname);
+  try {
+    await Product.insertMany(products);
+  } catch (e) {
+    throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, 'Please check the file and try again!');
+  }
+  return products.length;
 };
 
 const getCategoriesByProduct = async (productId) => {
@@ -113,21 +119,6 @@ const getCategoriesByProduct = async (productId) => {
   return categories;
 };
 
-const getTopProducts = async () => {};
-
-const bulkAddProducts = async (fileObj) => {
-  const products = await parseCSV(fileObj.originalname);
-  try {
-    await Product.insertMany(products);
-  } catch (e) {
-    throw new ApiError(
-      StatusCodes.INTERNAL_SERVER_ERROR,
-      'Please check the file and try again!'
-    );
-  }
-  return products.length;
-};
-
 module.exports = {
   addProduct,
   updateProduct,
@@ -136,6 +127,5 @@ module.exports = {
   getProductBySku,
   getTopProducts,
   getAllProducts,
-  getCategoriesByProduct,
   bulkAddProducts,
 };
