@@ -18,11 +18,11 @@ const getAllProducts = async (page = 1, pageSize = 20, q, categoryIds, maxPrice,
   }
 
   if (maxPrice !== undefined && minPrice !== undefined) {
-    query.markedPrice = { $gte: minPrice, $lte: maxPrice };
+    query.price = { $gte: minPrice, $lte: maxPrice };
   } else if (maxPrice !== undefined) {
-    query.markedPrice = { $gte: MIN_PRICE, $lte: maxPrice };
+    query.price = { $gte: MIN_PRICE, $lte: maxPrice };
   } else if (minPrice !== undefined) {
-    query.markedPrice = { $gte: minPrice };
+    query.price = { $gte: minPrice };
   }
 
   const skip = (page - 1) * pageSize;
