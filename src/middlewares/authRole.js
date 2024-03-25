@@ -1,5 +1,5 @@
-const { StatusCodes } = require("http-status-codes");
-const ApiError = require("../errors/ApiError");
+const { StatusCodes } = require('http-status-codes');
+const ApiError = require('../errors/ApiError');
 
 const authRole = (...roles) => {
   return async (req, res, next) => {

@@ -5,22 +5,20 @@ const catchAsync = require('../utils/catchAsync');
 const { setCookie, clearCookie } = require('../common/cookie');
 const { getUserByRefreshToken } = require('../services/userService');
 const emailQueue = require('../bullmq/queues/email');
+const ApiError = require('../errors/ApiError');
 
 const signup = catchAsync(async (req, res) => {
+  const { role } = req.query;
+  if (!role) throw new ApiError(StatusCodes.BAD_REQUEST, 'Role is required!');
   const user = await authService.signup(req.body);
   const userDetails = {
     id: user._id.toString(),
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.email,
-    role: req.params.role,
+    role,
   };
-  console.log(userDetails);
-
-  const { refreshToken, accessToken } = await tokenService.generateAuthTokens(
-    userDetails
-  );
-  console.log(refreshToken, accessToken);
+  const { refreshToken, accessToken } = await tokenService.generateAuthTokens(userDetails);
   user.refreshToken = refreshToken;
   await user.save();
   setCookie(res, 'jwt', refreshToken);
@@ -37,17 +35,17 @@ const signup = catchAsync(async (req, res) => {
 
 const login = catchAsync(async (req, res) => {
   const { email, password } = req.body;
+  const { role } = req.query;
+  if (!role) throw new ApiError(StatusCodes.BAD_REQUEST, 'Role is required!');
   const user = await authService.loginWithEmailAndPassword(email, password);
   const userDetails = {
     id: user._id.toString(),
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.email,
-    role: req.params.role,
+    role,
   };
-  const { refreshToken, accessToken } = await tokenService.generateAuthTokens(
-    userDetails
-  );
+  const { refreshToken, accessToken } = await tokenService.generateAuthTokens(userDetails);
   user.refreshToken = refreshToken;
   await user.save();
   setCookie(res, 'jwt', refreshToken);

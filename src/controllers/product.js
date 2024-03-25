@@ -4,14 +4,7 @@ const productService = require('../services/productService');
 
 const getAllProducts = catchAsync(async (req, res) => {
   const { page, limit, q, categories, maxprice, minprice } = req.query;
-  const products = await productService.getAllProducts(
-    page,
-    limit,
-    q,
-    categories,
-    maxprice,
-    minprice
-  );
+  const products = await productService.getAllProducts(page, limit, q, categories, maxprice, minprice);
   res.status(StatusCodes.OK).json({ products });
 });
 
@@ -22,9 +15,7 @@ const addProduct = catchAsync(async (req, res) => {
 
 const updateProduct = catchAsync(async (req, res) => {
   const product = await productService.updateProduct(req.params.id, req.body);
-  res
-    .status(StatusCodes.OK)
-    .json({ product, message: 'Product updated successfully!' });
+  res.status(StatusCodes.OK).json({ product, message: 'Product updated successfully!' });
 });
 
 const deleteProduct = catchAsync(async (req, res) => {
@@ -34,17 +25,13 @@ const deleteProduct = catchAsync(async (req, res) => {
 
 const getProductById = catchAsync(async (req, res) => {
   const product = await productService.getProductById(req.params.id);
+  console.log(product);
   res.status(StatusCodes.OK).json({ product });
 });
 
 const getProductBySku = catchAsync(async (req, res) => {
   const product = await productService.getProductBySku(req.params.sku);
   res.status(StatusCodes.OK).json({ product });
-});
-
-const getCategoriesByProduct = catchAsync(async (req, res) => {
-  const categories = await productService.getCategoriesByProduct(req.params.id);
-  res.status(StatusCodes.OK).json({ categories });
 });
 
 const getTopProducts = catchAsync(async (req, res) => {});
@@ -55,9 +42,7 @@ const bulkAddProducts = catchAsync(async (req, res) => {
   }
   const totalProducts = await productService.bulkAddProducts(req.file);
   console.log(totalProducts);
-  res
-    .status(StatusCodes.CREATED)
-    .json({ message: `Successfully added ${totalProducts} products!` });
+  res.status(StatusCodes.CREATED).json({ message: `Successfully added ${totalProducts} products!` });
 });
 
 module.exports = {
@@ -68,6 +53,5 @@ module.exports = {
   getAllProducts,
   getProductBySku,
   getTopProducts,
-  getCategoriesByProduct,
   bulkAddProducts,
 };
