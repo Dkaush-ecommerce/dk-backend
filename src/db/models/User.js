@@ -36,7 +36,7 @@ const userSchema = mongoose.Schema(
       default: [],
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 userSchema.statics.isEmailTaken = async function (email, excludeUserId) {

@@ -34,7 +34,7 @@ const addCategory = async (category) => {
       productIds.map((productId) => ({
         productId,
         categoryId: newCategory._id,
-      }))
+      })),
     );
   }
 
@@ -55,7 +55,7 @@ const updateCategory = async (categoryId, category) => {
   const updatedCategory = await Category.findByIdAndUpdate(
     { _id: categoryId },
     { $set: { name, active, parentCategory, description } },
-    { new: true }
+    { new: true },
   );
   if (!updatedCategory) {
     throw new ApiError(StatusCodes.NOT_FOUND, 'Category not found!');

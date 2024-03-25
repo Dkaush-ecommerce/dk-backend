@@ -18,13 +18,8 @@ const addCategory = catchAsync(async (req, res) => {
 });
 
 const updateCategory = catchAsync(async (req, res) => {
-  const category = await categoryService.updateCategory(
-    req.params.id,
-    req.body
-  );
-  res
-    .status(StatusCodes.OK)
-    .json({ category, message: 'Category updated successfully!' });
+  const category = await categoryService.updateCategory(req.params.id, req.body);
+  res.status(StatusCodes.OK).json({ category, message: 'Category updated successfully!' });
 });
 
 const deleteCategory = catchAsync(async (req, res) => {
@@ -34,11 +29,7 @@ const deleteCategory = catchAsync(async (req, res) => {
 
 const getProductsByCategory = catchAsync(async (req, res) => {
   const { limit, page } = req.query;
-  const products = await categoryService.getProductsByCategory(
-    req.body.category,
-    page,
-    limit
-  );
+  const products = await categoryService.getProductsByCategory(req.body.category, page, limit);
   res.status(StatusCodes.OK).json({ products });
 });
 

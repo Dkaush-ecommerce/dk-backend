@@ -7,10 +7,7 @@ const verifyJWT = async (req, res, next) => {
     throw new ApiError(StatusCodes.UNAUTHORIZED, 'No token provided!');
   }
   const accessToken = authHeader.split(' ').pop();
-  const accessTokenPayload = jwt.verify(
-    accessToken,
-    process.env.ACCESS_TOKEN_KEY
-  );
+  const accessTokenPayload = jwt.verify(accessToken, process.env.ACCESS_TOKEN_KEY);
   req.user = accessTokenPayload.user;
   next();
 };

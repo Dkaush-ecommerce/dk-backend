@@ -12,7 +12,7 @@ const categorySchema = mongoose.Schema(
       required: true,
     },
   },
-  { timestamps: { createdAt: true } }
+  { timestamps: { createdAt: true } },
 );
 
 module.exports = mongoose.model('Category', categorySchema);

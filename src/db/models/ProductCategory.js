@@ -11,7 +11,7 @@ const productCategorySchema = mongoose.Schema(
       required: true,
     },
   },
-  { timestamps: false }
+  { timestamps: false },
 );
 
 module.exports = mongoose.model('ProductCategory', productCategorySchema);

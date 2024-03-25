@@ -5,8 +5,7 @@ const getUserById = async (id) => User.findById(id);
 
 const getUserByEmail = async (email) => User.findOne({ email });
 
-const getUserByRefreshToken = async (refreshToken) =>
-  User.findOne({ refreshToken });
+const getUserByRefreshToken = async (refreshToken) => User.findOne({ refreshToken });
 
 const getUserCartProducts = async (userId) => {
   const cart = await User.findById(userId).populate('cart.items.product');
@@ -22,10 +21,7 @@ const getWishlist = async (userId) => {
     return products;
   } catch (error) {
     logger.error(error.message);
-    throw new ApiError(
-      StatusCodes.INTERNAL_SERVER_ERROR,
-      'Error fetching wishlist!'
-    );
+    throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, 'Error fetching wishlist!');
   }
 };
 
