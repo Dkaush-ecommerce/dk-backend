@@ -4,9 +4,9 @@ const verifyJWT = require('../middlewares/verifyJwt');
 
 const router = express.Router();
 
-router.put('/:id', verifyJWT, addToCart);
-router.put('/:id', verifyJWT, deleteFromCart);
-router.get('/:id', verifyJWT, getCart);
-router.put('/:id', verifyJWT, deleteCart);
+router.put('/add', verifyJWT, addToCart);
+router.put('/items/delete', verifyJWT, deleteFromCart);
+router.get('/me', verifyJWT, getCart);
+router.put('/delete', verifyJWT, deleteCart);
 
 module.exports = router;
