@@ -6,7 +6,7 @@ const authRole = (...roles) => {
     if (!req.headers.authorization) {
       throw new UnAutharise('JWT token not present');
     }
-    const userRole = req.userRole;
+    const userRole = req.user.role;
     let havePermission = false;
     roles.forEach((role) => {
       if (userRole === role) {
