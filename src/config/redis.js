@@ -1,5 +1,5 @@
 const redisOptions = {
-  host: 'localhost',
+  host: 'redis',
   port: 6379,
 };
 
