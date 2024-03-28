@@ -6,11 +6,12 @@ const { setCookie, clearCookie } = require('../common/cookie');
 const { getUserByRefreshToken } = require('../services/userService');
 const emailQueue = require('../bullmq/queues/email');
 const ApiError = require('../errors/ApiError');
+const ROLES = require('../utils/constants/roles');
 
 const signup = catchAsync(async (req, res) => {
   const { role } = req.query;
   if (!role) throw new ApiError(StatusCodes.BAD_REQUEST, 'Role is required!');
-  const user = await authService.signup(req.body);
+  const user = await authService.signup(req.body, role);
   const userDetails = {
     id: user._id.toString(),
     firstName: user.firstName,
@@ -37,7 +38,7 @@ const login = catchAsync(async (req, res) => {
   const { email, password } = req.body;
   const { role } = req.query;
   if (!role) throw new ApiError(StatusCodes.BAD_REQUEST, 'Role is required!');
-  const user = await authService.loginWithEmailAndPassword(email, password);
+  const user = await authService.loginWithEmailAndPassword(email, password, role);
   const userDetails = {
     id: user._id.toString(),
     firstName: user.firstName,
@@ -57,9 +58,15 @@ const login = catchAsync(async (req, res) => {
 
 const logout = catchAsync(async (req, res) => {
   const cookies = req.cookies;
+  const { role } = req.query;
   if (!cookies?.jwt) return res.sendStatus(StatusCodes.NO_CONTENT);
   const refreshToken = cookies.jwt;
-  const user = await getUserByRefreshToken(refreshToken);
+  let user;
+  if (role === ROLES.USER) {
+    user = await getUserByRefreshToken(refreshToken);
+  } else if (role === ROLES.ADMIN) {
+    user = await getAdminByRefreshToken(refreshToken);
+  }
   if (!user) {
     clearCookie(res, 'jwt');
     return res.sendStatus(StatusCodes.NO_CONTENT);
@@ -72,7 +79,8 @@ const logout = catchAsync(async (req, res) => {
 
 const refresh = catchAsync(async (req, res) => {
   const cookies = req.cookies;
-  const accessToken = await authService.refresh(cookies);
+  const { role } = req.query;
+  const accessToken = await authService.refresh(cookies, role);
   return res.status(StatusCodes.OK).send({ accessToken });
 });
 
