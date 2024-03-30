@@ -16,7 +16,7 @@ const router = express.Router();
 router.get('/', getAllCategories);
 router.post('/', verifyJWT, authRole(ROLES.ADMIN), addCategory);
 router.get('/:id', getCategoryById);
-router.put('/:id', updateCategory);
+router.put('/:id', verifyJWT, authRole(ROLES.ADMIN), updateCategory);
 router.delete('/:id', verifyJWT, authRole(ROLES.ADMIN), deleteCategory);
 router.get('/:id/products', getProductsByCategory);
 
