@@ -1,6 +1,9 @@
-const redisOptions = {
-  host: 'redis',
-  port: 6379,
-};
+const IORedis = require('ioredis');
+const envConfig = require('./env');
 
-module.exports = redisOptions;
+const connection = new IORedis(envConfig.redis.host, envConfig.redis.port, {
+  password: envConfig.redis.password,
+  maxRetriesPerRequest: 0,
+});
+
+module.exports = connection;
