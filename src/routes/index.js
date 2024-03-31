@@ -1,6 +1,6 @@
 const express = require('express');
-const envConfig = require('../config/env');
 const authRoutes = require('./auth');
+const reviewRoutes = require('./review');
 const userRoutes = require('./user');
 const cartRoutes = require('./cart');
 const productRoutes = require('./product');
@@ -32,6 +32,10 @@ const defaultRoutes = [
   {
     path: '/categories',
     route: categoryRoutes,
+  },
+  {
+    path: '/reviews',
+    route: reviewRoutes,
   },
 ];
 
