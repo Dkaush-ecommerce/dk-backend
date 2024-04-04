@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const categorySchema = mongoose.Schema(
+const couponSchema = mongoose.Schema(
   {
     name: {
       type: String,
@@ -28,4 +28,4 @@ const categorySchema = mongoose.Schema(
   { timestamps: { createdAt: true } },
 );
 
-module.exports = mongoose.model('Category', categorySchema);
+module.exports = mongoose.model('Coupon', couponSchema);
