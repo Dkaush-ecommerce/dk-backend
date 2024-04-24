@@ -19,7 +19,9 @@ const addDiscount = async () => {};
 
 const updateDiscount = async () => {};
 
-const deleteDiscount = async () => {};
+const deleteDiscount = async (id) => {
+  await Discount.findByIdAndDelete(id);
+};
 
 module.exports = {
   getAllDiscounts,
